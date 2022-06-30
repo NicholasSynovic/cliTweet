@@ -11,11 +11,11 @@ class SortingHelpFormatter(HelpFormatter):
         super(SortingHelpFormatter, self).add_arguments(actions)
 
 
-def apiArgs() -> Namespace:
+def progArgs() -> Namespace:
     parser: ArgumentParser = ArgumentParser(
-        prog=f"{name} API Experiments",
-        usage="Experiments to test the HuggingFace.co REST API",
-        epilog=f"Tests written by: {', '.join(authors)}",
+        prog=f"{name}",
+        usage="Tweet from the command line",
+        epilog=f"Written by: {', '.join(authors)}",
         formatter_class=SortingHelpFormatter,
     )
     parser.add_argument(
@@ -27,5 +27,12 @@ def apiArgs() -> Namespace:
         type=str,
         required=True,
         help="Tweet to post. NOTE: Tweet must be text only.",
+    )
+    parser.add_argument(
+        "-u",
+        "--username",
+        type=str,
+        required=True,
+        help="Twitter username",
     )
     return parser.parse_args()
