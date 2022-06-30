@@ -4,6 +4,7 @@ from io import BytesIO
 
 from clitweet.utils.args import progArgs
 from clitweet.utils.client import *
+from clitweet.utils.client import tweet
 from clitweet.utils.server import *
 
 
@@ -46,7 +47,10 @@ def main() -> None:
         challengeString=authChallenge,
     )
     accessToken: str = accessTokenData["access_token"]
-    print(accessToken)
+
+    print(f"Save this access token somewhere as you'll need it to tweet: {accessToken}")
+
+    tweet(args.tweet, accessToken)
 
 
 if __name__ == "__main__":
