@@ -19,11 +19,12 @@ def progArgs() -> Namespace:
         formatter_class=SortingHelpFormatter,
     )
 
-    loginParser: ArgumentParser = parser.add_subparsers(
-        "login", title="login", description="Commands to login into Twitter"
+    subparsers = parser.add_subparsers()
+    loginParser: ArgumentParser = subparsers.add_parser(name=
+        "login", help="Commands to login into Twitter"
     )
-    tweetParser: ArgumentParser = parser.add_subparsers(
-        "login", title="login", description="Commands to tweet"
+    tweetParser: ArgumentParser = subparsers.add_parser(
+        "tweet", help="Commands to tweet"
     )
 
     loginParser.add_argument(
