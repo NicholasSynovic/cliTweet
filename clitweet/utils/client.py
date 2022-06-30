@@ -18,9 +18,12 @@ def getAccessToken(
     )
     return resp.json()
 
-def tweet(text: str, accessToken: str) ->  int:
-    header: dict = {"Content-Type": "application/json",
-    "Authorization": f"Bearer {accessToken}"}
+
+def tweet(text: str, accessToken: str) -> int:
+    header: dict = {
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {accessToken}",
+    }
     body: dict = {"text": text}
     resp: Response = post("https://api.twitter.com/2/tweets", json=body, headers=header)
 

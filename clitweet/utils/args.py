@@ -18,40 +18,55 @@ def progArgs() -> Namespace:
         epilog=f"Written by: {', '.join(authors)}",
         formatter_class=SortingHelpFormatter,
     )
-    parser.add_argument(
-        "-t",
-        "--tweet",
-        type=str,
-        required=True,
-        help="Tweet to post. NOTE: Tweet must be text only.",
+
+    loginParser: ArgumentParser = parser.add_subparsers(
+        "login", title="login", description="Commands to login into Twitter"
     )
-    parser.add_argument(
+    tweetParser: ArgumentParser = parser.add_subparsers(
+        "login", title="login", description="Commands to tweet"
+    )
+
+    loginParser.add_argument(
         "-i",
         "--client-id",
         type=str,
         required=True,
         help="Twitter app OAuth 2.0 Client ID",
     )
-    parser.add_argument(
+    loginParser.add_argument(
         "-s",
         "--client-secret",
         type=str,
         required=True,
         help="Twitter app OAuth 2.0 Client Secret",
     )
-    parser.add_argument(
+    loginParser.add_argument(
         "--ip",
         type=str,
         required=False,
         default="127.0.0.1",
         help="IP address to host redirect URI. DEFAULT: 127.0.0.1",
     )
-    parser.add_argument(
+    loginParser.add_argument(
         "-p",
         "--port",
         type=int,
         required=False,
         default="4269",
         help="Port to host redirect URI. DEFAULT: 8000",
+    )
+    tweetParser.add_argument(
+        "-t",
+        "--tweet",
+        type=str,
+        required=True,
+        help="Tweet to post. NOTE: Tweet must be text only",
+    )
+    tweetParser.add_argument(
+        "-a",
+        "--access-token",
+        type=str,
+        required=True,
+        help="Twitter access token for this application",
     )
     return parser.parse_args()
