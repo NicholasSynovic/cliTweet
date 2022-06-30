@@ -2,11 +2,12 @@
 # Docs: https://developer.twitter.com/en/docs/authentication/oauth-2-0/user-access-token
 
 import random
+import socket
 import string
 from base64 import b64encode
 from collections import namedtuple
-import socket
 from io import BytesIO
+
 
 def tokenHandler(clientID: str, clientSecret: str) -> tuple:
     authKey: str = f"{clientID}:{clientSecret}"
@@ -17,8 +18,10 @@ def tokenHandler(clientID: str, clientSecret: str) -> tuple:
 
     return data(clientID, clientSecret, b64Key)
 
-def buildRedirectURI(ip: str, port: int)    -> str:
+
+def buildRedirectURI(ip: str, port: int) -> str:
     return f"http://{ip}:{port}"
+
 
 def buildAuthURL(
     clientID: str,
@@ -36,12 +39,16 @@ def buildAuthURL(
         for _ in range(stateLength)
     )
 
-    return (f"https://twitter.com/i/oauth2/authorize?response_type=code&client_id={clientID}&redirect_uri={redirectURI}&scope={'%20'.join(scopes)}&state={stateString}&code_challenge={challengeString}&code_challenge_method=plain", stateString)
+    return (
+        f"https://twitter.com/i/oauth2/authorize?response_type=code&client_id={clientID}&redirect_uri={redirectURI}&scope={'%20'.join(scopes)}&state={stateString}&code_challenge={challengeString}&code_challenge_method=plain",
+        stateString,
+    )
 
-def getAccessToken(ip: str, port: int)  ->  BytesIO:
+
+def getAuthToken(ip: str, port: int) -> BytesIO:
     data: BytesIO = BytesIO()
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as server:
-        server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)    # Reuse port
+        server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)  # Reuse port
         server.bind((ip, port))
         server.listen()
         conn, addr = server.accept()
@@ -55,7 +62,8 @@ def getAccessToken(ip: str, port: int)  ->  BytesIO:
 
         return data
 
-def verifyState(state: str, test: str)  ->  bool:
+
+def verifyState(state: str, test: str) -> bool:
     if state == test:
         return True
     return False
