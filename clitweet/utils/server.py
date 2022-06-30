@@ -9,7 +9,7 @@ from collections import namedtuple
 from io import BytesIO
 
 
-def tokenHandler(clientID: str, clientSecret: str) -> tuple:
+def secretsHandler(clientID: str, clientSecret: str) -> tuple:
     authKey: str = f"{clientID}:{clientSecret}"
     byteKey: bytes = authKey.encode()
     b64Key: str = b64encode(byteKey).decode()
@@ -41,6 +41,7 @@ def buildAuthURL(
 
     return (
         f"https://twitter.com/i/oauth2/authorize?response_type=code&client_id={clientID}&redirect_uri={redirectURI}&scope={'%20'.join(scopes)}&state={stateString}&code_challenge={challengeString}&code_challenge_method=plain",
+        challengeString,
         stateString,
     )
 

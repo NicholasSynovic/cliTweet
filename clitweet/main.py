@@ -10,29 +10,43 @@ from clitweet.utils.server import *
 def main() -> None:
     args: Namespace = progArgs()
 
-    tokens: tuple = tokenHandler(
+    secrets: tuple = secretsHandler(
         clientID=args.client_id, clientSecret=args.client_secret
     )
     redirectURI: str = buildRedirectURI(ip=args.ip, port=args.port)
 
-    authURLData: tuple = buildAuthURL(clientID=tokens.clientID, redirectURI=redirectURI)
+    authURLData: tuple = buildAuthURL(
+        clientID=secrets.clientID, redirectURI=redirectURI
+    )
     authURL: str = authURLData[0]
-    authState: str = authURLData[1]
+    authChallenge: str = authURLData[1]
+    authState: str = authURLData[2]
 
     print(f"Visit this URL to authenticate:\n\n{authURL}\n")
 
-    accessTokenBytes: BytesIO = getAuthToken(ip=args.ip, port=args.port)
-    accessTokenStr: str = accessTokenBytes.getvalue().decode().strip()
-    splitAccessToken: list = accessTokenStr.split("\n")
+    authResponse: BytesIO = (
+        getAuthToken(ip=args.ip, port=args.port).getvalue().decode().strip()
+    )
+    authResponseComponents: list = authResponse.split("\n")
+    authURIComponent: str = re.findall("[a-zA-Z0-9=&]+", authResponseComponents[0])[1]
+    authTokens: list = (
+        authURIComponent.replace("state=", "").replace("code=", "").split("&")
+    )
+    authStateToken: str = authTokens[0]
+    authCodeToken: str = authTokens[1]
 
-    accessToken: str = re.findall("[a-zA-Z0-9=&]+", splitAccessToken[0])[1]
-    tokens: list = accessToken.replace("state=", "").replace("code=", "").split("&")
-    stateToken: str = tokens[0]
-    codeToken: str = tokens[1]
-
-    if verifyState(state=authState, test=stateToken) == False:
+    if verifyState(state=authState, test=authStateToken) == False:
         print("OAuth 2.0 authentication state verification error")
         quit(1)
+
+    accessTokenData: dict = getAccessToken(
+        b64Key=secrets.basicAuthKey,
+        code=authCodeToken,
+        redirectURI=redirectURI,
+        challengeString=authChallenge,
+    )
+    accessToken: str = accessTokenData["access_token"]
+    print(accessToken)
 
 
 if __name__ == "__main__":
