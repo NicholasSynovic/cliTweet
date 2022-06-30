@@ -1,6 +1,6 @@
 # REST client to get access and refresh tokens
 
-from requests import Response, get, post
+from requests import Response, post
 
 
 def getAccessToken(
