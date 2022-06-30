@@ -1,6 +1,7 @@
 from argparse import ArgumentParser, HelpFormatter, Namespace
 from operator import attrgetter
 
+
 name: str = "CLI Tweet"
 authors: list = ["Nicholas M. Synovic"]
 
@@ -19,9 +20,9 @@ def progArgs() -> Namespace:
         formatter_class=SortingHelpFormatter,
     )
 
-    subparsers = parser.add_subparsers()
-    loginParser: ArgumentParser = subparsers.add_parser(name=
-        "login", help="Commands to login into Twitter"
+    subparsers = parser.add_subparsers(help="Availible subcommands", dest="opt")
+    loginParser: ArgumentParser = subparsers.add_parser(
+        name="login", help="Commands to login into Twitter"
     )
     tweetParser: ArgumentParser = subparsers.add_parser(
         "tweet", help="Commands to tweet"

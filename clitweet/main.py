@@ -4,13 +4,10 @@ from io import BytesIO
 
 from clitweet.utils.args import progArgs
 from clitweet.utils.client import *
-from clitweet.utils.client import tweet
 from clitweet.utils.server import *
 
 
-def main() -> None:
-    args: Namespace = progArgs()
-
+def login(args: Namespace)  ->  None:
     secrets: tuple = secretsHandler(
         clientID=args.client_id, clientSecret=args.client_secret
     )
@@ -50,7 +47,26 @@ def main() -> None:
 
     print(f"Save this access token somewhere as you'll need it to tweet: {accessToken}")
 
-    tweet(args.tweet, accessToken)
+def post(args: Namespace)  -> None:
+    tweet(args.tweet, args.access_token)
+
+
+def main() -> None:
+    args: Namespace = progArgs()
+
+    commands: dict = {
+        "login": login,
+        "tweet": post
+    }
+
+    option: function = commands.get(args.opt, None)
+    if not option:
+        print("No subcommand specified. Run clitweet -h for subcommands")
+        return
+
+    option(args)
+
+
 
 
 if __name__ == "__main__":
