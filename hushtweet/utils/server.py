@@ -56,12 +56,10 @@ def getAuthToken(ip: str, port: int) -> BytesIO:
 
         with conn:
             data.write(conn.recv(4096))
-            # data.writelines(conn.recv(4096))    # TODO: Change this to not be hardcoded
             conn.close()
 
         server.close()
-
-        return data
+    return data
 
 
 def verifyState(state: str, test: str) -> bool:
