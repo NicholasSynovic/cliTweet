@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "clitweet"
+name = "hushtweet"
 version = "0.1.0"
 description = "Tweet from the command line"
 authors = ["Nicholas M. Synovic <nicholas.synovic@gmail.com>"]
@@ -18,4 +18,4 @@ requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.scripts]
-clitweet = "clitweet.main:main"
+hushtweet = "hushtweet.main:main"

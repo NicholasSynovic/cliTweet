@@ -2,9 +2,9 @@ import re
 from argparse import Namespace
 from io import BytesIO
 
-from clitweet.utils.args import progArgs
-from clitweet.utils.client import *
-from clitweet.utils.server import *
+from hushtweet.utils.args import progArgs
+from hushtweet.utils.client import *
+from hushtweet.utils.server import *
 
 
 def login(args: Namespace) -> None:

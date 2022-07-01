@@ -1,10 +1,12 @@
-# cliTweet
+# HushTweet
 
 > Tweet from the command line
 
+![HushTweet logo](hushtweet.jpg)
+
 ## Table of Contents
 
-- [cliTweet](#clitweet)
+- [HushTweet](#hushtweet)
   - [Table of Contents](#table-of-contents)
   - [About](#about)
   - [Prerequisite](#prerequisite)
