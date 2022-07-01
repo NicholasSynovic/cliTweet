@@ -19,9 +19,10 @@ def getAccessToken(
     return resp
 
 
-def refreshToken(accessToken: str, clientID: str) -> Response:
+def refreshToken(b64Key: str, accessToken: str, clientID: str) -> Response:
     headers: dict = {
         "Content-Type": "application/x-www-form-urlencoded",
+        "Authorization": f"Basic {b64Key}",
     }
 
     data: str = (

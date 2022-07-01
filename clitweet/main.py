@@ -49,12 +49,18 @@ def login(args: Namespace) -> None:
         f"❗Save this access token somewhere as you'll need it to tweet: {accessToken}"
     )
 
+    rt: Response = refreshToken(secrets.basicAuthKey, accessToken, secrets.clientID)
+
 
 def post(args: Namespace) -> None:
     resp: Response = tweet(args.tweet, args.access_token)
     match resp.status_code:
         case 401:
             print("✋ Unauthorized access. Try logging in again")
+            quit()
+        case 403:
+            print("✋ Whoopsie, this is a duplicated tweet. Try being creative")
+            quit()
         case _:
             print("🐦 Tweet sent!")
 
