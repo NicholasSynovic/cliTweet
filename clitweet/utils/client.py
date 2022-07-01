@@ -19,6 +19,21 @@ def getAccessToken(
     return resp
 
 
+def refreshToken(accessToken: str, clientID: str) -> Response:
+    headers: dict = {
+        "Content-Type": "application/x-www-form-urlencoded",
+    }
+
+    data: str = (
+        f"refresh_token={accessToken}' &grant_type=refresh_token&client_id={clientID}"
+    )
+
+    resp: Response = post(
+        url="https://api.twitter.com/2/oauth2/token", headers=headers, data=data
+    )
+    return resp
+
+
 def tweet(text: str, accessToken: str) -> Response:
     header: dict = {
         "Content-Type": "application/json",

@@ -7,7 +7,7 @@ from clitweet.utils.client import *
 from clitweet.utils.server import *
 
 
-def login(args: Namespace)  ->  None:
+def login(args: Namespace) -> None:
     secrets: tuple = secretsHandler(
         clientID=args.client_id, clientSecret=args.client_secret
     )
@@ -45,9 +45,12 @@ def login(args: Namespace)  ->  None:
     )
     accessToken: str = accessTokenData.json()["access_token"]
 
-    print(f"❗Save this access token somewhere as you'll need it to tweet: {accessToken}")
+    print(
+        f"❗Save this access token somewhere as you'll need it to tweet: {accessToken}"
+    )
 
-def post(args: Namespace)  -> None:
+
+def post(args: Namespace) -> None:
     resp: Response = tweet(args.tweet, args.access_token)
     match resp.status_code:
         case 401:
@@ -55,13 +58,11 @@ def post(args: Namespace)  -> None:
         case _:
             print("🐦 Tweet sent!")
 
+
 def main() -> None:
     args: Namespace = progArgs()
 
-    commands: dict = {
-        "login": login,
-        "tweet": post
-    }
+    commands: dict = {"login": login, "tweet": post}
 
     option: function = commands.get(args.opt, None)
     if not option:
@@ -69,8 +70,6 @@ def main() -> None:
         return
 
     option(args)
-
-
 
 
 if __name__ == "__main__":

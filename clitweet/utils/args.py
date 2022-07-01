@@ -1,7 +1,6 @@
 from argparse import ArgumentParser, HelpFormatter, Namespace
 from operator import attrgetter
 
-
 name: str = "CLI Tweet"
 authors: list = ["Nicholas M. Synovic"]
 
