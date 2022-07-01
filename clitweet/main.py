@@ -37,15 +37,15 @@ def login(args: Namespace)  ->  None:
         print("OAuth 2.0 authentication state verification error")
         quit(1)
 
-    accessTokenData: dict = getAccessToken(
+    accessTokenData: Response = getAccessToken(
         b64Key=secrets.basicAuthKey,
         code=authCodeToken,
         redirectURI=redirectURI,
         challengeString=authChallenge,
     )
-    accessToken: str = accessTokenData["access_token"]
+    accessToken: str = accessTokenData.json()["access_token"]
 
-    print(f"Save this access token somewhere as you'll need it to tweet: {accessToken}")
+    print(f"❗Save this access token somewhere as you'll need it to tweet: {accessToken}")
 
 def post(args: Namespace)  -> None:
     resp: Response = tweet(args.tweet, args.access_token)

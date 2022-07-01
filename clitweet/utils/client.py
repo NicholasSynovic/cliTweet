@@ -5,7 +5,7 @@ from requests import Response, post
 
 def getAccessToken(
     b64Key: str, code: str, redirectURI: str, challengeString: str
-) -> dict:
+) -> Response:
     headers: dict = {
         "Content-Type": "application/x-www-form-urlencoded",
         "Authorization": f"Basic {b64Key}",
@@ -16,7 +16,7 @@ def getAccessToken(
     resp: Response = post(
         url="https://api.twitter.com/2/oauth2/token", headers=headers, data=data
     )
-    return resp.json()
+    return resp
 
 
 def tweet(text: str, accessToken: str) -> Response:
