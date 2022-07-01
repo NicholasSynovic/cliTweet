@@ -48,8 +48,12 @@ def login(args: Namespace)  ->  None:
     print(f"Save this access token somewhere as you'll need it to tweet: {accessToken}")
 
 def post(args: Namespace)  -> None:
-    tweet(args.tweet, args.access_token)
-
+    resp: Response = tweet(args.tweet, args.access_token)
+    match resp.status_code:
+        case 401:
+            print("✋ Unauthorized access. Try logging in again")
+        case _:
+            print("🐦 Tweet sent!")
 
 def main() -> None:
     args: Namespace = progArgs()
