@@ -43,13 +43,18 @@ def login(args: Namespace) -> None:
         redirectURI=redirectURI,
         challengeString=authChallenge,
     )
-    accessToken: str = accessTokenData.json()["access_token"]
+    accessTokenJSON: dict = accessTokenData.json()
+    accessToken: str = accessTokenJSON["access_token"]
+    refreshToken: str = accessTokenJSON["refresh_token"]
 
     print(
-        f"❗Save this access token somewhere as you'll need it to tweet: {accessToken}"
+        f"❗Save this access token somewhere as you'll need it to tweet: {accessToken}\n"
+    )
+    print(
+        f"❗Save this refresh token somewhere as you'll need it to tweet: {refreshToken}\n"
     )
 
-    rt: Response = refreshToken(secrets.basicAuthKey, accessToken, secrets.clientID)
+    # rt: Response = refreshToken(secrets.basicAuthKey, authStateToken, secrets.clientID)
 
 
 def post(args: Namespace) -> None:
