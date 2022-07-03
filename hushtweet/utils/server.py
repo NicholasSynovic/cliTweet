@@ -59,8 +59,7 @@ def getAuthToken(ip: str, port: int) -> BytesIO:
             conn.close()
 
         server.close()
-
-        return data
+    return data
 
 
 def verifyState(state: str, test: str) -> bool:
