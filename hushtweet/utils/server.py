@@ -26,7 +26,12 @@ def buildRedirectURI(ip: str, port: int) -> str:
 def buildAuthURL(
     clientID: str,
     redirectURI: str,
-    scopes: list = ["tweet.read", "tweet.write", "users.read", "offline.access"],
+    scopes: list = [
+        "tweet.read",
+        "tweet.write",
+        "users.read",
+        "offline.access",
+    ],
     challengeLength: int = 32,
     stateLength: int = 499,
 ) -> tuple:
