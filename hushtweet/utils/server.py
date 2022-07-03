@@ -26,7 +26,7 @@ def buildRedirectURI(ip: str, port: int) -> str:
 def buildAuthURL(
     clientID: str,
     redirectURI: str,
-    scopes: list = ["tweet.read", "tweet.write", "users.read"],
+    scopes: list = ["tweet.read", "tweet.write", "users.read", "offline.access"],
     challengeLength: int = 32,
     stateLength: int = 499,
 ) -> tuple:
@@ -56,7 +56,6 @@ def getAuthToken(ip: str, port: int) -> BytesIO:
 
         with conn:
             data.write(conn.recv(4096))
-            # data.writelines(conn.recv(4096))    # TODO: Change this to not be hardcoded
             conn.close()
 
         server.close()
