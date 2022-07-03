@@ -62,18 +62,37 @@ def login(args: Namespace) -> None:
 
     print("🐦 Successfully logged into Twitter!")
 
+    quit(2)
+
 
 def post(args: Namespace) -> None:
-    resp: Response = tweet(args.tweet, args.access_token)
+    credentials: dict = readTOML()
+
+    resp: Response = tweet(args.tweet, credentials["accessToken"])
     match resp.status_code:
         case 401:
-            print("✋ Unauthorized access. Try logging in again")
-            quit()
+            print("Updating access token...")
+
+            tokenUpdate: Response = refreshToken(
+                b64Key=credentials["authKey"],
+                refreshToken=credentials["refreshToken"],
+                clientID=credentials["clientID"],
+            )
+
+            credentials["accessToken"] = tokenUpdate["access_token"]
+            credentials["refreshToken"] = tokenUpdate["refresh_token"]
+
+            writeTOML(data=credentials)
+
+            print("Access token has been updated. Tweet hasn't been sent.")
+
+            quit(3)
         case 403:
             print("✋ Whoopsie, this is a duplicated tweet. Try being creative")
-            quit()
+            quit(4)
         case _:
             print("🐦 Tweet sent!")
+            quit(0)
 
 
 def main() -> None:
@@ -84,7 +103,7 @@ def main() -> None:
     option: function = commands.get(args.opt, None)
     if not option:
         print("No subcommand specified. Run clitweet -h for subcommands")
-        return
+        quit(1)
 
     option(args)
 

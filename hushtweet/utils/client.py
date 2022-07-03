@@ -19,14 +19,14 @@ def getAccessToken(
     return resp
 
 
-def refreshToken(b64Key: str, accessToken: str, clientID: str) -> Response:
+def refreshToken(b64Key: str, refreshToken: str, clientID: str) -> Response:
     headers: dict = {
         "Content-Type": "application/x-www-form-urlencoded",
         "Authorization": f"Basic {b64Key}",
     }
 
     data: str = (
-        f"refresh_token={accessToken}' &grant_type=refresh_token&client_id={clientID}"
+        f"refresh_token={refreshToken}&grant_type=refresh_token&client_id={clientID}"
     )
 
     resp: Response = post(
