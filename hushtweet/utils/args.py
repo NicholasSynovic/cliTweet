@@ -63,11 +63,4 @@ def progArgs() -> Namespace:
         required=True,
         help="Tweet to post. NOTE: Tweet must be text only",
     )
-    tweetParser.add_argument(
-        "-a",
-        "--access-token",
-        type=str,
-        required=True,
-        help="Twitter access token for this application",
-    )
     return parser.parse_args()
