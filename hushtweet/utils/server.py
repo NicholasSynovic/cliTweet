@@ -54,13 +54,13 @@ def buildAuthURL(
 def getAuthToken(ip: str, port: int) -> BytesIO:
     data: BytesIO = BytesIO()
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as server:
-        server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)  # Reuse port
+        server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         server.bind((ip, port))
         server.listen()
         conn, addr = server.accept()
 
         with conn:
-            data.write(conn.recv(4096))
+            data.write(conn.recv(8192))
             conn.close()
 
         server.close()
