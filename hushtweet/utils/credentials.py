@@ -1,12 +1,15 @@
 import toml
+from pathlib import Path
 
+def writeTOML(data: dict, filepath: str) -> str:
+    fn: Path = Path(filepath).expanduser().resolve()
 
-def writeTOML(data: dict) -> str:
-    with open(".htconfig.toml", "w") as tomlFile:
+    with open(fn, "w") as tomlFile:
         data: str = toml.dump(data, tomlFile)
         tomlFile.close()
     return data
 
 
-def readTOML() -> dict:
-    return toml.load(".htconfig.toml")
+def readTOML(filepath: str) -> dict:
+    fn: Path = Path(filepath).expanduser().resolve()
+    return toml.load(fn)

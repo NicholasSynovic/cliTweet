@@ -13,7 +13,7 @@ from colorama import Fore, Style
 
 def login(args: Namespace) -> None:
     try:
-        credentials: dict = readTOML()
+        credentials: dict = readTOML(filepath=args.config)
     except FileNotFoundError:
         credentials: dict = {
             "clientID": args.client_id,
@@ -61,7 +61,7 @@ def login(args: Namespace) -> None:
     credentials["accessToken"]: str = accessTokenJSON["access_token"]
     credentials["refreshToken"]: str = accessTokenJSON["refresh_token"]
 
-    writeTOML(data=credentials)
+    writeTOML(data=credentials, filepath=args.config)
 
     print(Fore.GREEN + "🐦 Successfully logged into Twitter!" + Style.RESET_ALL)
     coloramaDeinit()
@@ -69,7 +69,7 @@ def login(args: Namespace) -> None:
 
 
 def post(args: Namespace) -> None:
-    credentials: dict = readTOML()
+    credentials: dict = readTOML(filepath=args.config)
 
     resp: Response = tweet(args.tweet, credentials["accessToken"])
     match resp.status_code:
@@ -85,7 +85,7 @@ def post(args: Namespace) -> None:
             credentials["accessToken"] = tokenUpdate["access_token"]
             credentials["refreshToken"] = tokenUpdate["refresh_token"]
 
-            writeTOML(data=credentials)
+            writeTOML(data=credentials, filepath=args.config)
 
             print(Fore.YELLOW + "Access token has been updated. Tweet hasn't been sent." + Style.RESET_ALL)
             coloramaDeinit()

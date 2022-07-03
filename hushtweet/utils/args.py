@@ -18,6 +18,14 @@ def progArgs() -> Namespace:
         epilog=f"Written by: {', '.join(authors)}",
         formatter_class=SortingHelpFormatter,
     )
+    parser.add_argument(
+        "-c",
+        "--config",
+        type=str,
+        required=False,
+        default="~/.htconfig.toml",
+        help="File to store config token. DEFAULT: ~/.htconfig.toml",
+    )
 
     subparsers = parser.add_subparsers(help="Availible subcommands", dest="opt")
     loginParser: ArgumentParser = subparsers.add_parser(
