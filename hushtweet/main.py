@@ -4,14 +4,18 @@ from io import BytesIO
 
 from hushtweet.utils.args import progArgs
 from hushtweet.utils.client import *
-from hushtweet.utils.server import *
 from hushtweet.utils.credentials import *
+from hushtweet.utils.server import *
+
 
 def login(args: Namespace) -> None:
     try:
         credentials: dict = readTOML()
     except FileNotFoundError:
-        credentials: dict = {"clientID": args.client_id, "clientSecret": args.client_secret}
+        credentials: dict = {
+            "clientID": args.client_id,
+            "clientSecret": args.client_secret,
+        }
 
     credentials["authKey"]: str = generateKey(
         clientID=credentials["clientID"], clientSecret=credentials["clientSecret"]
@@ -55,7 +59,8 @@ def login(args: Namespace) -> None:
     credentials["refreshToken"]: str = accessTokenJSON["refresh_token"]
 
     writeTOML(data=credentials)
-    # rt: Response = refreshToken(secrets.basicAuthKey, authStateToken, secrets.clientID)
+
+    print("🐦 Successfully logged into Twitter!")
 
 
 def post(args: Namespace) -> None:
