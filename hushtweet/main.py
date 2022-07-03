@@ -5,16 +5,21 @@ from io import BytesIO
 from hushtweet.utils.args import progArgs
 from hushtweet.utils.client import *
 from hushtweet.utils.server import *
-
+from hushtweet.utils.credentials import *
 
 def login(args: Namespace) -> None:
-    secrets: tuple = secretsHandler(
-        clientID=args.client_id, clientSecret=args.client_secret
+    try:
+        credentials: dict = readTOML()
+    except FileNotFoundError:
+        credentials: dict = {"clientID": args.client_id, "clientSecret": args.client_secret}
+
+    credentials["authKey"]: str = generateKey(
+        clientID=credentials["clientID"], clientSecret=credentials["clientSecret"]
     )
     redirectURI: str = buildRedirectURI(ip=args.ip, port=args.port)
 
     authURLData: tuple = buildAuthURL(
-        clientID=secrets.clientID, redirectURI=redirectURI
+        clientID=credentials["clientID"], redirectURI=redirectURI
     )
     authURL: str = authURLData[0]
     authChallenge: str = authURLData[1]
@@ -38,22 +43,18 @@ def login(args: Namespace) -> None:
         quit(1)
 
     accessTokenData: Response = getAccessToken(
-        b64Key=secrets.basicAuthKey,
+        b64Key=credentials["authKey"],
         code=authCodeToken,
         redirectURI=redirectURI,
         challengeString=authChallenge,
     )
+
     accessTokenJSON: dict = accessTokenData.json()
-    accessToken: str = accessTokenJSON["access_token"]
-    refreshToken: str = accessTokenJSON["refresh_token"]
 
-    print(
-        f"❗Save this access token somewhere as you'll need it to tweet: {accessToken}\n"
-    )
-    print(
-        f"❗Save this refresh token somewhere as you'll need it to tweet: {refreshToken}\n"
-    )
+    credentials["accessToken"]: str = accessTokenJSON["access_token"]
+    credentials["refreshToken"]: str = accessTokenJSON["refresh_token"]
 
+    writeTOML(data=credentials)
     # rt: Response = refreshToken(secrets.basicAuthKey, authStateToken, secrets.clientID)
 
 

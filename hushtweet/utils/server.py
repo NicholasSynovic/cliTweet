@@ -9,14 +9,10 @@ from collections import namedtuple
 from io import BytesIO
 
 
-def secretsHandler(clientID: str, clientSecret: str) -> tuple:
+def generateKey(clientID: str, clientSecret: str) -> str:
     authKey: str = f"{clientID}:{clientSecret}"
     byteKey: bytes = authKey.encode()
-    b64Key: str = b64encode(byteKey).decode()
-
-    data: tuple = namedtuple("TokenHandler", "clientID clientSecret, basicAuthKey")
-
-    return data(clientID, clientSecret, b64Key)
+    return b64encode(byteKey).decode()
 
 
 def buildRedirectURI(ip: str, port: int) -> str:
