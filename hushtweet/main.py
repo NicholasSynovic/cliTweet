@@ -7,6 +7,9 @@ from hushtweet.utils.client import *
 from hushtweet.utils.credentials import *
 from hushtweet.utils.server import *
 
+from colorama import init as coloramaInit
+from colorama import deinit as coloramaDeinit
+from colorama import Fore, Style
 
 def login(args: Namespace) -> None:
     try:
@@ -29,7 +32,7 @@ def login(args: Namespace) -> None:
     authChallenge: str = authURLData[1]
     authState: str = authURLData[2]
 
-    print(f"Visit this URL to authenticate:\n\n{authURL}\n")
+    print(f"✨ Visit this URL to authenticate:\n\n{Fore.BLUE + authURL + Style.RESET_ALL}\n")
 
     authResponse: BytesIO = (
         getAuthToken(ip=args.ip, port=args.port).getvalue().decode().strip()
@@ -43,7 +46,7 @@ def login(args: Namespace) -> None:
     authCodeToken: str = authTokens[1]
 
     if verifyState(state=authState, test=authStateToken) == False:
-        print("OAuth 2.0 authentication state verification error")
+        print(Fore.RED + "OAuth 2.0 authentication state verification error" + Style.RESET_ALL)
         quit(1)
 
     accessTokenData: Response = getAccessToken(
@@ -60,8 +63,8 @@ def login(args: Namespace) -> None:
 
     writeTOML(data=credentials)
 
-    print("🐦 Successfully logged into Twitter!")
-
+    print(Fore.GREEN + "🐦 Successfully logged into Twitter!" + Style.RESET_ALL)
+    coloramaDeinit()
     quit(2)
 
 
@@ -84,18 +87,23 @@ def post(args: Namespace) -> None:
 
             writeTOML(data=credentials)
 
-            print("Access token has been updated. Tweet hasn't been sent.")
+            print(Fore.YELLOW + "Access token has been updated. Tweet hasn't been sent." + Style.RESET_ALL)
+            coloramaDeinit()
 
             quit(3)
         case 403:
-            print("✋ Whoopsie, this is a duplicated tweet. Try being creative")
+            print(Fore.RED + "✋ Whoopsie, this is a duplicated tweet. Try being creative" + Style.RESET_ALL)
+            coloramaDeinit()
             quit(4)
         case _:
-            print("🐦 Tweet sent!")
+            print(Fore.GREEN + "🐦 Tweet sent!" + Style.RESET_ALL)
+            coloramaDeinit()
             quit(0)
 
 
 def main() -> None:
+    coloramaInit()
+
     args: Namespace = progArgs()
 
     commands: dict = {"login": login, "tweet": post}
