@@ -82,8 +82,10 @@ def post(args: Namespace) -> None:
                 clientID=credentials["clientID"],
             )
 
-            credentials["accessToken"] = tokenUpdate["access_token"]
-            credentials["refreshToken"] = tokenUpdate["refresh_token"]
+            tokenUpdateJSON: dict = tokenUpdate.json()
+
+            credentials["accessToken"] = tokenUpdateJSON["access_token"]
+            credentials["refreshToken"] = tokenUpdateJSON["refresh_token"]
 
             writeTOML(data=credentials, filepath=args.config)
 
